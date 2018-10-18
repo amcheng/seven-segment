@@ -13,18 +13,18 @@ import numpy as np
 # gradient descent rates, learning rate
 nu = [1.0,2.0,5.0]
 
-# sigmoid squishing function
 def sigmoid(x):
+  """sigmoid function maps [-inf,inf] to [0,1]"""
     return 1 / (1 + np.exp(-x))
 
 
-# derivative of sigmoid function, x represents the sigmoid function itself
 def sig_deriv(x):
+  """sigmoid function derivative where x is sigmoid function itself"""
     return x * (1 - x)
 
 
-# prints a seven-segment number to the console
 def print_seven_seg(x):
+  """Prints an individual number given a list of 7 node values"""
     b = '#' if(x[1] > 0.5) else ' '
     c = '#' if(x[2] > 0.5) else ' '
     e = '#' if(x[4] > 0.5) else ' '
@@ -36,6 +36,33 @@ def print_seven_seg(x):
     for i in range(4):
         print(e+'       '+c)
     print(' # # # # ') if(x[3] > 0.5) else print()
+
+
+
+def print_all_numbers(out_layer):
+  """Prints to console an entire set of 10 numbers 0-9 given a list of lists"""
+  for num in out_layer:
+    print(' # # # #      ', end='') if(num[0] > 0.5) else print('              ', end='')
+  print()
+  for i in range(4):
+    for num in out_layer:
+      b = '#' if(num[1] > 0.5) else ' '
+      f = '#' if(num[5] > 0.5) else ' '
+      print(f+'       '+b+'     ', end='')  
+    print()
+  for num in out_layer:
+    print(' # # # #      ', end='') if(num[6] > 0.5) else print('              ', end='')
+  print()
+  for i in range(4):
+    for num in out_layer:
+      c = '#' if(num[2] > 0.5) else ' '
+      e = '#' if(num[4] > 0.5) else ' '
+      print(e+'       '+c+'     ', end='')
+    print()
+  for num in out_layer:
+    print(' # # # #      ', end='') if(num[3] > 0.5) else print('              ', end='')
+  print()
+
 
 
 # define training data
@@ -51,7 +78,7 @@ X = np.array([[0, 0, 0, 0],
               [1, 0, 0, 0],
               [1, 0, 0, 1],])
 # outputs, drawings of numbers represented by 
-# activating a segment or keeping it dark 
+# activating a segment or keeping it dark, each list draws a number
 Y = np.array([[1, 1, 1, 1, 1, 1, 0],
               [0, 1, 1, 0, 0, 0, 0],
               [1, 1, 0, 1, 1, 0, 1],
@@ -81,6 +108,11 @@ def main():
         l1 = sigmoid(l0 @ w0)
         l2 = sigmoid(l1 @ w1)
         output_layer = sigmoid(l2 @ w2)
+        input("------- Press enter to train neural network -------")
+        print_all_numbers(output_layer)
+        # for number in output_layer:
+        #   print_seven_seg(number)
+        #   print('-'*10)
 
         # Calculate gradient for last synapse
         # Error function is (Y-output)**2, partial derivative below:
